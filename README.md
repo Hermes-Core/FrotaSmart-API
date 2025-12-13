@@ -1,6 +1,9 @@
 # FrotaSmart-API
 API RESTful para gerenciamento inteligente de frotas, motoristas e manutenções preventivas.
 
+## Diagrama
+<img src="diagrama.png" alt="Diagrama">
+
 ## Lista das principais classes do sistema
 
 ### Domínio (Core Domain)
@@ -54,3 +57,4 @@ API RESTful para gerenciamento inteligente de frotas, motoristas e manutenções
 `Responsabilidade`: Interface (API Flask) e Configurações.
 
 `Tarefas`: Configuração do Flask, criação dos Endpoints (Rotas) e implementação da classe Settings para leitura do settings.json.
+
