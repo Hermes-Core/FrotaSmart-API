@@ -1,6 +1,17 @@
 [
     {
         "tipo": "carro",
+        "placa": "API-TEST",
+        "marca": "Ford",
+        "modelo": "Ka",
+        "ano": 2021,
+        "km": 0.0,
+        "status": "Ativo",
+        "portas": 4,
+        "consumo_medio": 0.0
+    },
+    {
+        "tipo": "carro",
         "placa": "POO-2025",
         "marca": "Fiat",
         "modelo": "Uno",
