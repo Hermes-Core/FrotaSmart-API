@@ -1,46 +1,45 @@
-# importando as coisas necessarias
 from abc import ABC, abstractmethod
 from app.models.enums import StatusVeiculo
 
-# classe abstrata Veiculo
 class Veiculo(ABC):
-    # construtor
-    def __init__(self, placa, marca, modelo, ano):
-        # salvando os dados do veiculo
-        self.placa = placa
-        self.marca = marca
-        self.modelo = modelo
-        self.ano = ano
-        self.km = 0.0
-        self.status = StatusVeiculo.ATIVO
-    
-    # funcao para pegar a quilometragem
-    def get_km(self):
-        return self.km
-    
-    # funcao para atualizar a quilometragem
-    def set_km(self, nova_km):
-        # verificando se a km nova é menor que a atual
-        if nova_km < self.km:
-            # se for, da erro
-            raise ValueError("A quilometragem não pode ser reduzida! Atual: " + str(self.km) + ", Tentativa: " + str(nova_km))
-        else:
-            # senao, atualiza
-            self.km = nova_km
-    
-    # funcao para pegar o status em formato texto
-    def get_status(self):
-        # retorna o valor do status
-        return self.status.value
-    
-    # metodo abstrato que precisa ser implementado nas classes filhas
+    def __init__(self, placa: str, marca: str, modelo: str, ano: int):
+        self._placa = placa
+        self._marca = marca
+        self._modelo = modelo
+        self._ano = ano
+        self._km: float = 0.0
+        self._status = StatusVeiculo.ATIVO
+
+    @property
+    def placa(self) -> str:
+        return self._placa
+
+    @property
+    def km(self) -> float:
+        return self._km
+
+    @km.setter
+    def km(self, nova_km: float):
+        if nova_km < self._km:
+            raise ValueError("A quilometragem não pode ser reduzida.")
+        self._km = nova_km
+
+    @property
+    def status(self) -> str:
+        return self._status.value
+
     @abstractmethod
-    def exibir_detalhes(self):
-        # este metodo precisa ser implementado
+    def exibir_detalhes(self) -> str:
         pass
-    
-    # metodo para imprimir o veiculo
-    def __str__(self):
-        # retornando a string formatada
-        resultado = "[" + self.placa + "] " + self.marca + " " + self.modelo + " (" + str(self.ano) + ") - " + str(self.km) + "km"
-        return resultado
+
+    # Métodos Mágicos
+    def __str__(self) -> str:
+        return f"[{self._placa}] {self._marca} {self._modelo}"
+
+    def __eq__(self, outro):
+        if isinstance(outro, Veiculo):
+            return self._placa == outro.placa
+        return False
+
+    def __lt__(self, outro):
+        return self._km < outro.km
