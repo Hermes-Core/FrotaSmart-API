@@ -20,7 +20,7 @@ API RESTful para gerenciamento inteligente de frotas, motoristas e manutenções
 ### Passo 1: Clone o repositório
 
 ```bash
-git clone <url-do-repositorio>
+git clone [<url-do-repositorio>](https://github.com/Hermes-Core/FrotaSmart-API.git)
 cd FrotaSmart-API
 ```
 
