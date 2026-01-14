@@ -1,0 +1,11 @@
+{
+  "manutencao": {
+    "km_preventiva": 10000,
+    "custo_hora_padrao": 150.00
+  },
+  "politicas_cnh": {
+    "moto": "A",
+    "carro": "B",
+    "caminhao": "C"
+  }
+}
