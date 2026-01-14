@@ -1,57 +1,71 @@
-# importando as bibliotecas necessarias
 from datetime import datetime
+from typing import List, Dict
 from app.models.enums import StatusVeiculo
 
-# classe mixin para manutencao
 class ManutenivelMixin:
-    # esse mixin serve para gerenciar manutencao dos veiculos
-    
+    """Gerencia status e histórico de manutenções."""
     def __init__(self):
-        # criando a lista de manutencoes vazia
-        self.historico_manutencoes = []
-        # status inicial do veiculo é ativo
-        self.status = StatusVeiculo.ATIVO
-    
-    # funcao para registrar manutencao
-    def registrar_manutencao(self, tipo, custo, descricao):
-        # pegando a data de hoje
-        data_atual = datetime.now()
-        # convertendo para string
-        data_string = data_atual.isoformat()
+        if not hasattr(self, '_historico_manutencoes'):
+            self._historico_manutencoes: List[Dict] = []
+        if not hasattr(self, '_status'):
+            self._status = StatusVeiculo.ATIVO
+
+    def registrar_manutencao(self, tipo: str, custo: float, descricao: str) -> None:
+        registro = {
+            "data": datetime.now().isoformat(),
+            "tipo": tipo,
+            "custo": custo,
+            "descricao": descricao
+        }
+        self._historico_manutencoes.append(registro)
+        self._status = StatusVeiculo.MANUTENCAO
+
+    def finalizar_manutencao(self) -> None:
+        if self._status == StatusVeiculo.MANUTENCAO:
+            self._status = StatusVeiculo.ATIVO
+
+    @property
+    def em_manutencao(self) -> bool:
+        return self._status == StatusVeiculo.MANUTENCAO
+
+
+class AbastecivelMixin:
+    """Gerencia abastecimento e cálculo de consumo."""
+    def __init__(self):
+        if not hasattr(self, '_historico_abastecimento'):
+            self._historico_abastecimento: List[Dict] = []
+        if not hasattr(self, '_consumo_medio'):
+            self._consumo_medio = 0.0
+
+    def abastecer(self, litros: float, valor: float, km_atual: float):
+        # Tenta pegar a KM atual do veículo
+        km_anterior = getattr(self, 'km', 0)
         
-        # criando o dicionario com os dados da manutencao
-        registro = {}
-        registro["data"] = data_string
-        registro["tipo"] = tipo
-        registro["custo"] = custo
-        registro["descricao"] = descricao
-        
-        # adicionando na lista
-        self.historico_manutencoes.append(registro)
-        
-        # mudando o status para manutencao
-        self.status = StatusVeiculo.MANUTENCAO
-        
-        # imprimindo mensagem
-        print("Manutenção registrada: " + descricao + ". Status alterado para " + self.status.value + ".")
-    
-    # funcao para finalizar manutencao
-    def finalizar_manutencao(self):
-        # verificando se o veiculo esta em manutencao
-        if self.status != StatusVeiculo.MANUTENCAO:
-            # se nao estiver, mostra mensagem
-            print("O veículo não está em manutenção.")
-            return
-        else:
-            # se estiver, muda o status para ativo
-            self.status = StatusVeiculo.ATIVO
-            # mostra mensagem de sucesso
-            print("Manutenção finalizada. Veículo liberado (Status: " + self.status.value + ").")
-    
-    # funcao para verificar se esta em manutencao
-    def em_manutencao(self):
-        # retorna True se estiver em manutencao
-        if self.status == StatusVeiculo.MANUTENCAO:
-            return True
-        else:
-            return False
+        # Lógica de consumo (se andou algo)
+        distancia = km_atual - km_anterior
+        if distancia > 0 and litros > 0:
+            consumo_trecho = distancia / litros
+            if self._consumo_medio == 0:
+                self._consumo_medio = consumo_trecho
+            else:
+                # Média ponderada simples
+                self._consumo_medio = (self._consumo_medio + consumo_trecho) / 2
+
+        # Atualiza KM no veículo se possível
+        if hasattr(self, 'km'):
+            try:
+                self.km = km_atual
+            except ValueError:
+                pass # Ignora erro se KM for menor (validação do Veiculo)
+
+        registro = {
+            "data": datetime.now().isoformat(),
+            "litros": litros,
+            "valor": valor,
+            "km_momento": km_atual
+        }
+        self._historico_abastecimento.append(registro)
+
+    @property
+    def consumo_medio(self) -> float:
+        return round(self._consumo_medio, 2)

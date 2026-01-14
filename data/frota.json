@@ -1,0 +1,35 @@
+[
+    {
+        "tipo": "carro",
+        "placa": "API-TEST",
+        "marca": "Ford",
+        "modelo": "Ka",
+        "ano": 2021,
+        "km": 0.0,
+        "status": "Ativo",
+        "portas": 4,
+        "consumo_medio": 0.0
+    },
+    {
+        "tipo": "carro",
+        "placa": "POO-2025",
+        "marca": "Fiat",
+        "modelo": "Uno",
+        "ano": 2020,
+        "km": 0.0,
+        "status": "Ativo",
+        "portas": 2,
+        "consumo_medio": 0.0
+    },
+    {
+        "tipo": "moto",
+        "placa": "MOTO-999",
+        "marca": "Honda",
+        "modelo": "CG",
+        "ano": 2023,
+        "km": 0.0,
+        "status": "Ativo",
+        "cilindradas": 160,
+        "consumo_medio": 0.0
+    }
+]

@@ -2,25 +2,25 @@ from typing import Dict, Any
 from app.models.veiculo import Veiculo
 from app.models.mixins import ManutenivelMixin, AbastecivelMixin
 
-class Carro(Veiculo, ManutenivelMixin, AbastecivelMixin):
-    def __init__(self, placa: str, marca: str, modelo: str, ano: int, portas: int = 4):
+class Moto(Veiculo, ManutenivelMixin, AbastecivelMixin):
+    def __init__(self, placa: str, marca: str, modelo: str, ano: int, cilindradas: int):
         Veiculo.__init__(self, placa, marca, modelo, ano)
         ManutenivelMixin.__init__(self)
         AbastecivelMixin.__init__(self)
-        self._portas = portas
+        self._cilindradas = cilindradas
 
     def exibir_detalhes(self) -> str:
-        return f"🚗 Carro {self._modelo} ({self._portas} portas) - {self.status}"
+        return f"Moto {self._modelo} ({self._cilindradas}cc) - {self.status}"
 
     def to_dict(self) -> Dict[str, Any]:
         return {
-            "tipo": "carro",
+            "tipo": "moto",
             "placa": self.placa,
             "marca": self._marca,
             "modelo": self._modelo,
             "ano": self._ano,
             "km": self.km,
             "status": self.status,
-            "portas": self._portas,
+            "cilindradas": self._cilindradas,
             "consumo_medio": self.consumo_medio
         }
